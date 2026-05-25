@@ -1,0 +1,195 @@
+# A Quest for the Amethyst Jawline! [Alpha] - A Text-Based Adventure Game 
+
+# ======================================================================
+# SET-UP
+# ======================================================================
+
+import random
+
+# Constants
+PLAYER_START_HEALTH = 100
+HEAL_RANGE = (5, 20)
+
+# DICTIONARY
+
+WEAPONS = {
+    "1": {"name": "Sword", "emoji": "🗡️", "dmg_range": (4,12), "desc": "Sword is a versatile weapon, effective in close combat."},
+    "2": {"name": "Dagger", "emoji": "🗡️", "dmg_range": (7,8), "desc": "Dagger is a fast and agile weapon, ideal for quick strikes."},
+    "3": {"name": "Axe", "emoji": "🪓", "dmg_range": (2,16), "desc": "Axe is a powerful weapon, capable of dealing heavy damage."},
+    "4": {"name": "Bow", "emoji": "🏹", "dmg_range": (6,9), "desc": "Bow is a ranged weapon, allowing you to attack from a distance."},
+    "420": {"name": "The Mighty Dev Hammer", "emoji": "🔨", "dmg_range": (900, 10000), "desc": "The Bringer of Justice."}
+}
+
+LOCATIONS = {
+    "1": {"name": "Forest", "emoji": "🌲", "desc": "A dense and mysterious forest, filled with hidden dangers and secrets."},
+    "2": {"name": "Colosseum", "emoji": "🏟️", "desc": "An ancient arena where warriors from all over the world come to fight for glory."},
+    "3": {"name": "Dungeon", "emoji": "🕸️", "desc": "A dark and treacherous underground labyrinth, home to monsters and treasures alike."},
+}
+
+ENEMIES = {
+    "1": {"name": "Barbatos, the Guardian of the Forest", 
+        "desc": "A towering figure clad in ancient armor and unthinkable jawline, he's the embodiment of nature's wrath and beauty combined!", 
+        "weapon": {"name": "Ancient Spear", "emoji": "🗡️", "dmg_range": (4,16), "desc": "A spear imbued with the power of the forest, capable of striking with incredible speed and precision!"},
+        "health": 80, "loot": ("Magical Herb", "Ancient Spear Shard") 
+        },
+      
+    "2": {"name": "Sigius, the Black", 
+        "desc": "A truly glorious male specimen, with a chiseled jawline and broad shoulders, he's the epitome of evolutionary perfection!",
+        "weapon": {"name": "Shadow Blade", "emoji": "🗡️", "dmg_range": (5,15), "desc": "A blade forged in the shadows, capable of striking with deadly precision!"},
+        "health": 90, "loot": ("Warrior Perfumes", "Shadow Blade Shard"), 
+        }, 
+
+    "3": {"name": "Gorath, the Dungeon Overlord", 
+        "desc": "A monstrous jawline behemoth with a menacing presence, he's the ruler of the dungeon and a formidable foe to all who dare enter his domain.",
+        "weapon": {"name": "Giant Mace", "emoji": "🔨", "dmg_range": (2,18), "desc": "A massive mace that can crush anything in its path, wielded by the Dungeon Overlord himself!"},
+        "health": 100, "loot": ("E-Girl photo", "Giant Mace Shard"),
+        }
+}
+
+location = LOCATIONS
+weapon = WEAPONS
+enemy = ENEMIES
+inventory = []
+
+# ======================================================================
+# FUNCTIONS
+# ======================================================================
+
+def get_user_choice(prompt, valid_choices):
+    while True:
+        choice = input(prompt).strip()
+        if choice in valid_choices:
+            return choice
+        else:
+            print(f"Invalid choice! Choose from: {', '.join(valid_choices)}")
+
+def get_damage(weapon):
+    min_dmg, max_dmg = weapon['dmg_range']
+    return random.randint(min_dmg, max_dmg)
+
+def enemy_turn(enemy):
+    damage = get_damage(enemy['weapon'])
+    print(f"The enemy attacks with their {enemy['weapon']['name']} {enemy['weapon']['emoji']}, dealing {damage} damage!")
+    return damage
+
+def add_to_inventory(inventory, loot):
+    inventory == loot, 
+    loot =  {enemy['loot']}
+
+def show_inventory(inventory):
+        print("Inventory: ", inventory)
+    
+def battle(player, enemy):
+
+    while player["health"] > 0 and enemy["health"] > 0:
+        
+        action = get_user_choice(
+            "What will you do? (Attack/Defend/Heal/Info): \n",
+            ["attack", "defend", "heal", "info"]
+        )                         
+    
+        weapon = player["weapon"]
+
+        if action == "attack":
+            damage = get_damage(weapon)
+            enemy["health"] -= damage
+            
+            print(f"You strike the foe with your {weapon['name']} {weapon['emoji']}, dealing {damage} damage! The enemy's health is now {enemy['health']}.")
+            
+            if enemy['health'] > 0:
+                player['health'] -= enemy_turn(enemy)
+#
+
+        elif action == "defend":
+        
+            print("You raise your shield, preparing to block the enemy's next attack! 🛡️")
+       
+            defense_damage = enemy["weapon"]["dmg_range"][0]      # Deals minimal damage
+            player["health"] -= defense_damage
+        
+            print(f"The enemy attacks with their {enemy['weapon']['name']} {enemy['weapon']['emoji']}, dealing {defense_damage} damage! Your health is now {player['health']}.")
+#
+
+        elif action == "heal":
+            if player["health"] < 100:
+                heal_amount = random.randint(HEAL_RANGE[0], HEAL_RANGE[1])
+                player["health"] += heal_amount
+
+                if player["health"] > 100:
+                    player["health"] = 100
+        
+                print(f"You use a healing potion, restoring {heal_amount} health! Your health is now {player['health']}.")
+            else:
+                print("Your hp is full!")
+
+            if enemy["health"] > 0:
+                damage = enemy_turn(enemy)
+                player["health"] -= damage
+                print(f"Your health is now {player['health']}.")
+
+
+#
+
+        elif action == "info":
+            print(f"""{enemy['name']}. {enemy['desc']}. He wields a {enemy['weapon']['name']} {enemy['weapon']['emoji']}!
+            It has a damage value of {enemy['weapon']['dmg_range']}.""")
+            continue 
+
+        else:
+            print("Invalid action!")
+            continue
+
+# BATTLE END
+
+    if enemy["health"] <= 0:
+        print(f"Congratulations! You have defeated {enemy['name']}! 🎉")
+        print(f"You have obtained {enemy['loot']}")
+        add_to_inventory(inventory, {enemy['loot']})
+
+    if player["health"] <= 0:
+        print(f"Alas, you have been defeated by {enemy['name']}... Better luck next time!")
+
+# ======================================================================
+# GAME START!
+# ======================================================================
+
+print("Welcome to 'A Quest for the Amethyst Jawline [Alpha]!' ⚔️")
+player_name = input("What is your name, brave warrior? ")
+print(f"{player_name}, Greetings! I hope you are ready! 🛡️\n")\
+
+# Weapon Selection
+weapon_choice = get_user_choice(
+    "Select a weapon (1-4): ",
+    ["1", "2", "3", "4", "420"]
+)
+
+weapon = WEAPONS[weapon_choice]
+print(f"You chose: {weapon['name']} {weapon['emoji']}")
+print(f"Damage range: {weapon['dmg_range'][0]}-{weapon['dmg_range'][1]}\n")
+
+#Location Choice
+location_choice = get_user_choice(
+    "Where shall you go? (1-3): ",
+    ["1", "2", "3"]
+)
+location = LOCATIONS[location_choice]
+print(f"You have chosen to venture into the {location['name']}! {location['emoji']}")
+print(f"{location['desc']}\n")
+
+player = {
+    "name": player_name,
+    "health": 100,
+    "weapon": weapon,
+    "inventory": []
+}
+
+
+#Section 3: Enemy Encounter 
+
+enemy = ENEMIES[location_choice].copy()
+print(f"Behold! {enemy['name']} has challanged you to a battle! {location['emoji']}\n")
+battle(player, enemy)
+
+# ===================
+# BATTLE!
+# ====================
