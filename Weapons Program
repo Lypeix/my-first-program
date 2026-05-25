@@ -1,16 +1,8 @@
-# A Quest for the Amethyst Jawline! [Alpha] - A Text-Based Adventure Game 
-
-# ======================================================================
-# SET-UP
-# ======================================================================
-
 import random
 
-# Constants
 PLAYER_START_HEALTH = 100
 HEAL_RANGE = (5, 20)
 
-# DICTIONARY
 
 WEAPONS = {
     "1": {"name": "Sword", "emoji": "🗡️", "dmg_range": (4,12), "desc": "Sword is a versatile weapon, effective in close combat."},
@@ -50,10 +42,6 @@ location = LOCATIONS
 weapon = WEAPONS
 enemy = ENEMIES
 inventory = []
-
-# ======================================================================
-# FUNCTIONS
-# ======================================================================
 
 def get_user_choice(prompt, valid_choices):
     while True:
@@ -139,7 +127,6 @@ def battle(player, enemy):
             print("Invalid action!")
             continue
 
-# BATTLE END
 
     if enemy["health"] <= 0:
         print(f"Congratulations! You have defeated {enemy['name']}! 🎉")
@@ -149,15 +136,10 @@ def battle(player, enemy):
     if player["health"] <= 0:
         print(f"Alas, you have been defeated by {enemy['name']}... Better luck next time!")
 
-# ======================================================================
-# GAME START!
-# ======================================================================
-
 print("Welcome to 'A Quest for the Amethyst Jawline [Alpha]!' ⚔️")
 player_name = input("What is your name, brave warrior? ")
 print(f"{player_name}, Greetings! I hope you are ready! 🛡️\n")\
 
-# Weapon Selection
 weapon_choice = get_user_choice(
     "Select a weapon (1-4): ",
     ["1", "2", "3", "4", "420"]
@@ -167,7 +149,6 @@ weapon = WEAPONS[weapon_choice]
 print(f"You chose: {weapon['name']} {weapon['emoji']}")
 print(f"Damage range: {weapon['dmg_range'][0]}-{weapon['dmg_range'][1]}\n")
 
-#Location Choice
 location_choice = get_user_choice(
     "Where shall you go? (1-3): ",
     ["1", "2", "3"]
@@ -184,12 +165,7 @@ player = {
 }
 
 
-#Section 3: Enemy Encounter 
 
 enemy = ENEMIES[location_choice].copy()
 print(f"Behold! {enemy['name']} has challanged you to a battle! {location['emoji']}\n")
 battle(player, enemy)
-
-# ===================
-# BATTLE!
-# ====================
