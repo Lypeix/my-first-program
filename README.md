@@ -1,3 +1,1 @@
-Project #1
-
-Learning python with AI practice
+LEARNING PROJECT WITH HEAVY AI ASSISTANCE
