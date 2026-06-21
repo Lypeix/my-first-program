@@ -1,3 +1,3 @@
 PROJECT #1
 
-MESSY LEARNING PROJECT WITH AI ASSISTANCE 
+Discontinued messy learning project, first program
